@@ -74,7 +74,7 @@ func (s *StockRecordService) Outbound(productID, warehouseID, shelfID uint64, qu
 	})
 }
 
-// OutboundTx 在给定事务内执行出库。
+// OutboundTx 在给定事务内执行出库，按 FIFO（先进先出）从最早入库的批次开始扣减，不足时报错。
 func (s *StockRecordService) OutboundTx(tx *gorm.DB, productID, warehouseID, shelfID uint64, quantity int) error {
 	if quantity <= 0 {
 		return util.NewAppError(constants.CodeValidationFailed, "StockRecord[quantity="+itoa(uint64(quantity))+"] outbound: quantity must > 0")
@@ -87,22 +87,26 @@ func (s *StockRecordService) OutboundTx(tx *gorm.DB, productID, warehouseID, she
 	for _, r := range records {
 		available += r.Quantity
 	}
-	if available <= quantity {
+	if available < quantity {
 		s.logger.Warn(constants.LogStockOutboundFailed, "product_id", productID, "available", available, "need", quantity)
 		return util.NewAppError(constants.CodeInsufficientStock, constants.MsgInsufficientStock)
 	}
 	remain := quantity
+	now := time.Now()
 	for i := range records {
 		if remain <= 0 {
 			break
+		}
+		if records[i].Quantity <= 0 {
+			continue
 		}
 		take := records[i].Quantity
 		if take > remain {
 			take = remain
 		}
-		records[i].Quantity = take
+		records[i].Quantity -= take
 		records[i].LastOpType = constants.StockOpOutbound
-		records[i].LastOpAt = time.Now()
+		records[i].LastOpAt = now
 		remain -= take
 		if err := s.repo.UpdateTx(tx, &records[i]); err != nil {
 			return util.Wrap(err, "StockRecord[id=%d] outbound update failed", records[i].ID)

@@ -92,3 +92,104 @@ func TestOutboundOrderFIFOAndExactStock(t *testing.T) {
 		t.Fatalf("oldest batch quantity = %d, want 0 (FIFO)", oldest.Quantity)
 	}
 }
+
+// TestOutboundOrderFIFOPartialDeduct 验证出库按 FIFO 从最老批次开始扣减，
+// 当只需消耗部分老批次时，新批次应保持原样、老批次只扣减掉对应数量。
+func TestOutboundOrderFIFOPartialDeduct(t *testing.T) {
+	_, productRepo, warehouseRepo, recordRepo, _, orderSvc := newOutboundFixture(t)
+
+	p := &model.Product{Name: "电容", SKU: "SKU-OUT-2", Unit: "件", MinStock: 0, MaxStock: 0}
+	if err := productRepo.Create(p); err != nil {
+		t.Fatalf("create product: %v", err)
+	}
+	w := &model.Warehouse{Name: "华南仓", Code: "WH-OUT2", Status: "active"}
+	if err := warehouseRepo.Create(w); err != nil {
+		t.Fatalf("create warehouse: %v", err)
+	}
+	now := time.Now()
+	b1 := &model.StockRecord{ProductID: p.ID, WarehouseID: w.ID, BatchNo: "OLD", Quantity: 100, InboundDate: &now, LastOpType: constants.StockOpInbound, LastOpAt: now}
+	b2 := &model.StockRecord{ProductID: p.ID, WarehouseID: w.ID, BatchNo: "NEW", Quantity: 100, InboundDate: &now, LastOpType: constants.StockOpInbound, LastOpAt: now}
+	if err := recordRepo.Create(b1); err != nil {
+		t.Fatalf("create batch1: %v", err)
+	}
+	if err := recordRepo.Create(b2); err != nil {
+		t.Fatalf("create batch2: %v", err)
+	}
+
+	items := []model.StockOrderItem{{ProductID: p.ID, Quantity: 70}}
+	order, err := orderSvc.Create(1, constants.OrderTypeOutbound, w.ID, 0, "", items)
+	if err != nil {
+		t.Fatalf("Create order: %v", err)
+	}
+	if _, err := orderSvc.Submit(order.ID); err != nil {
+		t.Fatalf("Submit order: %v", err)
+	}
+	if _, err := orderSvc.Execute(order.ID); err != nil {
+		t.Fatalf("Execute order: %v", err)
+	}
+
+	records, err := recordRepo.FindByProductWarehouse(p.ID, w.ID)
+	if err != nil {
+		t.Fatalf("find records: %v", err)
+	}
+	byID := map[uint64]int{}
+	for i := range records {
+		byID[records[i].ID] = records[i].Quantity
+	}
+	// FIFO: 70 全部来自老批次 b1（100 -> 30），新批次 b2 保持 100 不动。
+	if byID[b1.ID] != 30 {
+		t.Fatalf("oldest batch quantity = %d, want 30 (FIFO partial deduct)", byID[b1.ID])
+	}
+	if byID[b2.ID] != 100 {
+		t.Fatalf("newest batch quantity = %d, want 100 (untouched)", byID[b2.ID])
+	}
+}
+
+// TestOutboundOrderInsufficientStock 验证库存不足时返回库存不足错误，
+// 并且不会改动任何批次数量（事务回滚）。
+func TestOutboundOrderInsufficientStock(t *testing.T) {
+	_, productRepo, warehouseRepo, recordRepo, _, orderSvc := newOutboundFixture(t)
+
+	p := &model.Product{Name: "电感", SKU: "SKU-OUT-3", Unit: "件", MinStock: 0, MaxStock: 0}
+	if err := productRepo.Create(p); err != nil {
+		t.Fatalf("create product: %v", err)
+	}
+	w := &model.Warehouse{Name: "华北仓", Code: "WH-OUT3", Status: "active"}
+	if err := warehouseRepo.Create(w); err != nil {
+		t.Fatalf("create warehouse: %v", err)
+	}
+	now := time.Now()
+	b1 := &model.StockRecord{ProductID: p.ID, WarehouseID: w.ID, BatchNo: "OLD", Quantity: 100, InboundDate: &now, LastOpType: constants.StockOpInbound, LastOpAt: now}
+	b2 := &model.StockRecord{ProductID: p.ID, WarehouseID: w.ID, BatchNo: "NEW", Quantity: 50, InboundDate: &now, LastOpType: constants.StockOpInbound, LastOpAt: now}
+	if err := recordRepo.Create(b1); err != nil {
+		t.Fatalf("create batch1: %v", err)
+	}
+	if err := recordRepo.Create(b2); err != nil {
+		t.Fatalf("create batch2: %v", err)
+	}
+
+	// 总库存 150，需 200，应报库存不足。
+	items := []model.StockOrderItem{{ProductID: p.ID, Quantity: 200}}
+	order, err := orderSvc.Create(1, constants.OrderTypeOutbound, w.ID, 0, "", items)
+	if err != nil {
+		t.Fatalf("Create order: %v", err)
+	}
+	if _, err := orderSvc.Submit(order.ID); err != nil {
+		t.Fatalf("Submit order: %v", err)
+	}
+	if _, err := orderSvc.Execute(order.ID); err == nil {
+		t.Fatalf("Execute should fail with insufficient stock")
+	}
+
+	records, err := recordRepo.FindByProductWarehouse(p.ID, w.ID)
+	if err != nil {
+		t.Fatalf("find records: %v", err)
+	}
+	byID := map[uint64]int{}
+	for i := range records {
+		byID[records[i].ID] = records[i].Quantity
+	}
+	if byID[b1.ID] != 100 || byID[b2.ID] != 50 {
+		t.Fatalf("stock changed after failed outbound: b1=%d b2=%d, want 100/50", byID[b1.ID], byID[b2.ID])
+	}
+}
