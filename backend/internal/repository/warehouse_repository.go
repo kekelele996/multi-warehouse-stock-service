@@ -32,7 +32,7 @@ func (r *WarehouseRepository) FindByID(id uint64) (*model.Warehouse, error) {
 	var w model.Warehouse
 	if err := r.db.First(&w, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrNotFound
+			return nil, nil
 		}
 		return nil, fmt.Errorf("find warehouse by id: %w", err)
 	}
