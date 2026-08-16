@@ -86,6 +86,9 @@ func (s *StockOrderService) Submit(id uint64) (*model.StockOrder, error) {
 	if err != nil {
 		return nil, util.Wrap(err, "StockOrder[id=%d] submit find failed", id)
 	}
+	if o == nil {
+		return nil, repository.ErrNotFound
+	}
 	if o.Status != constants.OrderStatusDraft {
 		s.logger.Warn(constants.LogOrderSubmitFailed, "order_id", id, "status", o.Status)
 		return nil, util.NewAppError(constants.CodeOrderStatusConflict, "StockOrder[id="+u64(id)+"] submit conflict: status="+o.Status)

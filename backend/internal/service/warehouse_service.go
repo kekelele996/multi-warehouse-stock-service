@@ -67,6 +67,9 @@ func (s *WarehouseService) ChangeStatus(id uint64, status string) (*model.Wareho
 	if err != nil {
 		return nil, util.Wrap(err, "Warehouse[id=%d] status find failed", id)
 	}
+	if w == nil {
+		return nil, repository.ErrNotFound
+	}
 	w.Status = status
 	if err := s.repo.Update(w); err != nil {
 		return nil, util.Wrap(err, "Warehouse[id=%d] status save failed", id)
