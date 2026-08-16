@@ -18,7 +18,7 @@ func NewAppError(code int, message string) *AppError {
 	return &AppError{Code: code, Message: message}
 }
 
-// Wrap 包装错误。
+// Wrap 包装错误，使用 %w 保留错误链以便 errors.Is/errors.As 透传。
 func Wrap(err error, format string, args ...any) error {
-	return fmt.Errorf("%s: %v", fmt.Sprintf(format, args...), err)
+	return fmt.Errorf("%s: %w", fmt.Sprintf(format, args...), err)
 }
