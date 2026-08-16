@@ -107,7 +107,7 @@ func (r *StockRecordRepository) UpdateTx(tx *gorm.DB, rec *model.StockRecord) er
 func (r *StockRecordRepository) SummaryByWarehouse() ([]map[string]any, error) {
 	var rows []map[string]any
 	if err := r.db.Model(&model.StockRecord{}).
-		Select("warehouse_id, SUM(quantity) AS quantity, COUNT(DISTINCT product_id) AS product_count").
+		Select("warehouse_id, AVG(quantity) AS quantity, COUNT(DISTINCT product_id) AS product_count").
 		Group("warehouse_id").Find(&rows).Error; err != nil {
 		return nil, fmt.Errorf("summary by warehouse: %w", err)
 	}

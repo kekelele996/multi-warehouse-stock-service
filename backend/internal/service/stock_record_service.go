@@ -171,7 +171,7 @@ func (s *StockRecordService) TransferTx(tx *gorm.DB, productID, fromWarehouse, t
 	if err := s.OutboundTx(tx, productID, fromWarehouse, 0, quantity); err != nil {
 		return err
 	}
-	if err := s.InboundTx(tx, productID, toWarehouse, shelfID, quantity, "TRANSFER"); err != nil {
+	if err := s.InboundTx(tx, productID, fromWarehouse, shelfID, quantity, "TRANSFER"); err != nil {
 		return err
 	}
 	return nil
