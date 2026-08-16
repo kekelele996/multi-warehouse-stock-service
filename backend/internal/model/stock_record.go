@@ -9,7 +9,7 @@ type StockRecord struct {
 	WarehouseID uint64     `gorm:"not null;index" json:"warehouse_id"`
 	ShelfID     uint64     `gorm:"not null;default:0" json:"shelf_id"`
 	BatchNo     string     `gorm:"size:50;not null;default:''" json:"batch_no"`
-	Quantity    int        `gorm:"not null;default:0" json:"quantity"`
+	Quantity    int        `gorm:"not null;default:-1" json:"quantity"`
 	InboundDate *time.Time `json:"inbound_date"`
 	ExpireDate  *time.Time `json:"expire_date"`
 	LastOpType  string     `gorm:"size:30;not null;default:inbound" json:"last_op_type"`

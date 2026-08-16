@@ -143,7 +143,7 @@ func (s *StockRecordService) AdjustTx(tx *gorm.DB, productID, warehouseID, shelf
 	for _, r := range records {
 		total += r.Quantity
 	}
-	diff := actualQuantity - total
+	diff := total - actualQuantity
 	records[0].Quantity += diff
 	records[0].LastOpType = constants.StockOpAdjust
 	records[0].LastOpAt = time.Now()
