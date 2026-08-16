@@ -52,7 +52,7 @@ func (r *StockOrderRepository) findByID(db *gorm.DB, id uint64, forUpdate bool) 
 	}
 	if err := q.First(&o, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrNotFound
+			return nil, fmt.Errorf("find stock order by id: %v", ErrNotFound)
 		}
 		return nil, fmt.Errorf("find stock order by id: %w", err)
 	}
