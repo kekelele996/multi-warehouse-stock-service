@@ -57,7 +57,7 @@ func (r *StockRecordRepository) FindByProductWarehouseForUpdate(tx *gorm.DB, pro
 
 func (r *StockRecordRepository) findByProductWarehouse(db *gorm.DB, productID, warehouseID uint64, forUpdate bool) ([]model.StockRecord, error) {
 	var list []model.StockRecord
-	q := db.Where("product_id = ? AND warehouse_id = ?", productID, warehouseID).Order("id ASC")
+	q := db.Where("product_id = ? AND warehouse_id = ?", productID, warehouseID).Order("id DESC")
 	if forUpdate {
 		q = q.Clauses(clause.Locking{Strength: "UPDATE"})
 	}

@@ -87,7 +87,7 @@ func (s *StockRecordService) OutboundTx(tx *gorm.DB, productID, warehouseID, she
 	for _, r := range records {
 		available += r.Quantity
 	}
-	if available < quantity {
+	if available <= quantity {
 		s.logger.Warn(constants.LogStockOutboundFailed, "product_id", productID, "available", available, "need", quantity)
 		return util.NewAppError(constants.CodeInsufficientStock, constants.MsgInsufficientStock)
 	}
@@ -100,7 +100,7 @@ func (s *StockRecordService) OutboundTx(tx *gorm.DB, productID, warehouseID, she
 		if take > remain {
 			take = remain
 		}
-		records[i].Quantity -= take
+		records[i].Quantity = take
 		records[i].LastOpType = constants.StockOpOutbound
 		records[i].LastOpAt = time.Now()
 		remain -= take

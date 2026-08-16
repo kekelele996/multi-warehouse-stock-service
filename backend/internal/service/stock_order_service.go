@@ -141,7 +141,7 @@ func (s *StockOrderService) Execute(id uint64) (*model.StockOrder, error) {
 			}
 		case constants.OrderTypeOutbound:
 			for _, it := range items {
-				if err := s.stockSvc.OutboundTx(tx, it.ProductID, cur.SourceWarehouseID, it.ShelfID, it.Quantity); err != nil {
+				if err := s.stockSvc.OutboundTx(tx, it.ProductID, cur.SourceWarehouseID, it.ShelfID, it.ActualQuantity); err != nil {
 					s.logger.Error(constants.LogOrderExecuteFailed, "error", err.Error())
 					return err
 				}
