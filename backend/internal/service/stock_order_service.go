@@ -148,7 +148,7 @@ func (s *StockOrderService) Execute(id uint64) (*model.StockOrder, error) {
 			}
 		case constants.OrderTypeTransfer:
 			for _, it := range items {
-				if err := s.stockSvc.TransferTx(tx, it.ProductID, cur.SourceWarehouseID, cur.TargetWarehouseID, it.ShelfID, it.ActualQuantity); err != nil {
+				if err := s.stockSvc.TransferTx(tx, it.ProductID, cur.SourceWarehouseID, cur.TargetWarehouseID, it.ShelfID, it.Quantity); err != nil {
 					return err
 				}
 			}
