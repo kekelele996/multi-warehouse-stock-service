@@ -57,6 +57,9 @@ func (s *UserService) Register(phone, password, name, role string) (*model.User,
 func (s *UserService) Login(secret string, expireHours int, phone, password string) (string, *model.User, error) {
 	u, err := s.repo.FindByPhone(phone)
 	if err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			return "", nil, util.NewAppError(constants.CodeInvalidCredentials, constants.MsgInvalidCredentials)
+		}
 		return "", nil, util.Wrap(err, "User[phone=%s] login find failed", phone)
 	}
 	if bcrypt.CompareHashAndPassword([]byte(u.PasswordHash), []byte(password)) != nil {
