@@ -1,0 +1,54 @@
+- generic [ref=f2e3]:
+  - generic [ref=f2e4]:
+    - generic [ref=f2e5] [cursor=pointer]: 多仓库库存管理系统
+    - menubar [ref=f2e6]:
+      - menuitem "库存总览" [ref=f2e7] [cursor=pointer]
+      - menuitem "仓库管理" [ref=f2e8] [cursor=pointer]
+      - menuitem "商品管理" [ref=f2e9] [cursor=pointer]
+      - menuitem "出入库管理" [ref=f2e10] [cursor=pointer]
+      - menuitem "盘点管理" [ref=f2e11] [cursor=pointer]
+      - menuitem "操作日志" [ref=f2e12] [cursor=pointer]
+      - menuitem "个人中心" [ref=f2e13] [cursor=pointer]
+    - generic [ref=f2e14]:
+      - generic [ref=f2e15]: 仓库经理
+      - button "退出" [ref=f2e16] [cursor=pointer]
+  - main [ref=f2e18]:
+    - generic [ref=f2e19]:
+      - button "新建仓库" [ref=f2e21] [cursor=pointer]
+      - generic [ref=f2e23]:
+        - generic [ref=f2e25]:
+          - generic [ref=f2e27]:
+            - generic [ref=f2e28]: 华东一号仓（WH-001）
+            - generic: 启用
+          - generic [ref=f2e29]:
+            - paragraph [ref=f2e30]: 地址：上海市青浦区物流园 1 号
+            - paragraph [ref=f2e31]: 面积：12000 m²
+            - paragraph [ref=f2e32]: 电话：021-88880001
+            - button "查看库位" [ref=f2e33] [cursor=pointer]
+            - button "停用" [ref=f2e35] [cursor=pointer]
+        - generic [ref=f2e38]:
+          - generic [ref=f2e40]:
+            - generic [ref=f2e41]: 华南二号仓（WH-002）
+            - generic: 启用
+          - generic [ref=f2e42]:
+            - paragraph [ref=f2e43]: 地址：广州市黄埔区仓储大道 8 号
+            - paragraph [ref=f2e44]: 面积：8000 m²
+            - paragraph [ref=f2e45]: 电话：020-88880002
+            - button "查看库位" [ref=f2e46] [cursor=pointer]
+            - button "停用" [ref=f2e48] [cursor=pointer]
+        - generic [ref=f2e51]:
+          - generic [ref=f2e53]:
+            - generic [ref=f2e54]: 冒烟测试仓（WH-TEST）
+            - generic: 停用
+          - generic [ref=f2e55]:
+            - paragraph [ref=f2e56]: 地址：测试地址
+            - paragraph [ref=f2e57]: 面积：1000 m²
+            - paragraph [ref=f2e58]: 电话：-
+            - button "查看库位" [ref=f2e59] [cursor=pointer]
+            - button "启用" [ref=f2e61] [cursor=pointer]
+      - generic [ref=f2e63]:
+        - generic [ref=f2e64]: 共 3 条
+        - button "上一页" [disabled] [ref=f2e65]
+        - list [ref=f2e66]:
+          - listitem "第 1 页" [ref=f2e67]: "1"
+        - button "下一页" [disabled] [ref=f2e68]

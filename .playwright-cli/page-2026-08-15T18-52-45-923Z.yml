@@ -1,0 +1,12 @@
+- generic [ref=f1e5]:
+  - heading "登录" [level=2] [ref=f1e6]
+  - generic [ref=f1e7]:
+    - generic [ref=f1e8]:
+      - generic [ref=f1e9]: 手机号
+      - textbox "手机号" [ref=f1e13]: "13800000002"
+    - generic [ref=f1e14]:
+      - generic [ref=f1e15]: 密码
+      - generic [ref=f1e18]:
+        - textbox "密码" [ref=f1e19]: User@123
+        - generic [ref=f1e21] [cursor=pointer]
+    - button "登录" [ref=f1e27] [cursor=pointer]

@@ -1,0 +1,104 @@
+- generic [ref=f3e3]:
+  - generic [ref=f3e4]:
+    - generic [ref=f3e5] [cursor=pointer]: 多仓库库存管理系统
+    - menubar [ref=f3e6]:
+      - menuitem "库存总览" [ref=f3e7] [cursor=pointer]
+      - menuitem "仓库管理" [ref=f3e8] [cursor=pointer]
+      - menuitem "商品管理" [ref=f3e9] [cursor=pointer]
+      - menuitem "出入库管理" [ref=f3e10] [cursor=pointer]
+      - menuitem "盘点管理" [ref=f3e11] [cursor=pointer]
+      - menuitem "操作日志" [ref=f3e12] [cursor=pointer]
+      - menuitem "个人中心" [ref=f3e13] [cursor=pointer]
+    - generic [ref=f3e14]:
+      - generic [ref=f3e15]: 仓库经理
+      - button "退出" [ref=f3e16] [cursor=pointer]
+  - main [ref=f3e18]:
+    - generic [ref=f3e19]:
+      - generic [ref=f3e20]:
+        - generic [ref=f3e21]:
+          - tablist [ref=f3e25]:
+            - tab "全部" [selected] [ref=f3e27]
+            - tab "入库" [ref=f3e28]
+            - tab "出库" [ref=f3e29]
+            - tab "调拨" [ref=f3e30]
+            - tab "盘点" [ref=f3e31]
+          - generic:
+            - tabpanel "全部"
+        - button "创建单据" [ref=f3e32] [cursor=pointer]
+      - generic [ref=f3e35]:
+        - table [ref=f3e37]:
+          - rowgroup [ref=f3e46]:
+            - row [ref=f3e47]:
+              - columnheader "单号" [ref=f3e48]
+              - columnheader "类型" [ref=f3e50]
+              - columnheader "状态" [ref=f3e52]
+              - columnheader "源仓库" [ref=f3e54]
+              - columnheader "目标仓库" [ref=f3e56]
+              - columnheader "备注" [ref=f3e58]
+              - columnheader "操作" [ref=f3e60]
+        - table [ref=f3e66]:
+          - rowgroup [ref=f3e75]:
+            - row [ref=f3e76]:
+              - cell "OUT2026147159" [ref=f3e77]
+              - cell "出库" [ref=f3e79]
+              - cell "已取消" [ref=f3e81]
+              - cell "1" [ref=f3e83]
+              - cell "0" [ref=f3e85]
+              - cell [ref=f3e87]
+              - cell [ref=f3e88]:
+                - button "详情" [ref=f3e90] [cursor=pointer]
+            - row [ref=f3e92]:
+              - cell "CK2026238483" [ref=f3e93]
+              - cell "盘点" [ref=f3e95]
+              - cell "已完成" [ref=f3e97]
+              - cell "1" [ref=f3e99]
+              - cell "0" [ref=f3e101]
+              - cell [ref=f3e103]
+              - cell [ref=f3e104]:
+                - button "详情" [ref=f3e106] [cursor=pointer]
+            - row [ref=f3e108]:
+              - cell "TR2026104152" [ref=f3e109]
+              - cell "调拨" [ref=f3e111]
+              - cell "已完成" [ref=f3e113]
+              - cell "1" [ref=f3e115]
+              - cell "2" [ref=f3e117]
+              - cell [ref=f3e119]
+              - cell [ref=f3e120]:
+                - button "详情" [ref=f3e122] [cursor=pointer]
+            - row [ref=f3e124]:
+              - cell "IN2026414376" [ref=f3e125]
+              - cell "入库" [ref=f3e127]
+              - cell "已完成" [ref=f3e129]
+              - cell "0" [ref=f3e131]
+              - cell "3" [ref=f3e133]
+              - cell "冒烟入库" [ref=f3e135]
+              - cell [ref=f3e137]:
+                - button "详情" [ref=f3e139] [cursor=pointer]
+            - row [ref=f3e141]:
+              - cell "OUT202608160001" [ref=f3e142]
+              - cell "出库" [ref=f3e144]
+              - cell "待审批" [ref=f3e146]
+              - cell "1" [ref=f3e148]
+              - cell "0" [ref=f3e150]
+              - cell "电容出库" [ref=f3e152]
+              - cell [ref=f3e154]:
+                - generic [ref=f3e155]:
+                  - button "详情" [ref=f3e156] [cursor=pointer]
+                  - button "审批" [ref=f3e158] [cursor=pointer]
+                  - button "执行" [ref=f3e160] [cursor=pointer]
+                  - button "取消" [ref=f3e162] [cursor=pointer]
+            - row [ref=f3e164]:
+              - cell "IN202608160001" [ref=f3e165]
+              - cell "入库" [ref=f3e167]
+              - cell "已完成" [ref=f3e169]
+              - cell "0" [ref=f3e171]
+              - cell "1" [ref=f3e173]
+              - cell "电阻入库" [ref=f3e175]
+              - cell [ref=f3e177]:
+                - button "详情" [ref=f3e179] [cursor=pointer]
+      - generic [ref=f3e186]:
+        - generic [ref=f3e187]: 共 6 条
+        - button "上一页" [disabled] [ref=f3e188]
+        - list [ref=f3e189]:
+          - listitem "第 1 页" [ref=f3e190]: "1"
+        - button "下一页" [disabled] [ref=f3e191]
