@@ -154,7 +154,7 @@ func (s *StockOrderService) Execute(id uint64) (*model.StockOrder, error) {
 			}
 		case constants.OrderTypeInventoryCheck:
 			for _, it := range items {
-				if err := s.stockSvc.AdjustTx(tx, it.ProductID, cur.SourceWarehouseID, it.ShelfID, it.ActualQuantity); err != nil {
+				if err := s.stockSvc.AdjustTx(tx, it.ProductID, cur.SourceWarehouseID, it.ShelfID, it.Quantity); err != nil {
 					return err
 				}
 			}
